@@ -1,0 +1,20 @@
+name:                b64hs
+version:             0.1.0.0
+#synopsis:
+#description:
+homepage:            https://github.com/AdituV/b64hs#readme
+license:             BSD3
+author:              Iris Ward
+maintainer:          aditu.venyhandottir@gmail.com
+copyright:           2018 Iris Ward
+category:            Web
+extra-source-files:
+- README.md
+
+dependencies:
+  - base >= 4.7 && < 5
+
+executables:
+  b64hs:
+    source-dirs:      src
+    main:             Main.hs
