@@ -5,6 +5,7 @@ module Main where
 
 import           Cache
 import           Deck
+import           Hero
 
 import           Control.Monad          (void)
 import           Control.Monad.Except
@@ -44,7 +45,7 @@ getCardName Cache{cards=cs} dbfId =
 pprintDeck :: Cache -> Deck -> IO ()
 pprintDeck cache Deck{format=f, hero=h, cards=cs} = do
   putStrLn $ "Deck Format: " ++ show f
-  putStrLn $ "Deck Hero #: " ++ show h
+  putStrLn $ "Deck Hero: " ++ show h ++ " (" ++ heroClass h ++ ")"
   void $ IntMap.traverseWithKey
     (\k v -> do
       case getCardName cache k of

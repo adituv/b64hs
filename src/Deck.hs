@@ -1,6 +1,8 @@
 {-# LANGUAGE TupleSections #-}
 module Deck(Deck(..), Format(..)) where
 
+import           Hero
+
 import           Control.Monad      (replicateM, unless, void)
 import           Data.Foldable      (traverse_)
 import           Data.IntMap.Strict (IntMap)
@@ -10,7 +12,7 @@ import           Data.VarInt
 
 data Deck = Deck
   { format :: Format
-  , hero   :: Int
+  , hero   :: Hero
   , cards  :: IntMap Int
   } deriving Show
 
@@ -28,9 +30,10 @@ getDeck = do
     fail ("Unknown deck version: " ++ show ver)
   fmt <- getFormat
 
-  heroes <- getVIArray
-  unless (length heroes == 1) $
-    fail ("Invalid hero count: " ++ show (length heroes))
+  lenHeroes <- getVarInt
+  unless (lenHeroes == 1) $
+    fail ("Invalid hero count: " ++ show lenHeroes)
+  hero <- get
   cards1 <- getVIArray
   cards2 <- getVIArray
   cardsN <- getKVArray
@@ -38,7 +41,7 @@ getDeck = do
 
   pure Deck
     { format = fmt
-    , hero = head heroes
+    , hero = hero
     , cards = cards
     }
 
@@ -48,7 +51,8 @@ putDeck Deck{format=f, hero=h, cards=cs} = do
   putVarInt 1 -- Version
   putFormat f
 
-  putVIArray [h] -- Hero
+  putVarInt 1 -- Length of heroes array
+  put h
   let (cards1, cards2, cardsN) = splitCardData cs
   putVIArray cards1
   putVIArray cards2
