@@ -5,8 +5,8 @@ module Main where
 
 import           Cache
 
+import           Hearthstone.Card
 import           Hearthstone.Deck
-import           Hearthstone.Hero
 
 import           Control.Monad          (void)
 import           Control.Monad.Except
@@ -14,15 +14,13 @@ import           Control.Monad.IO.Class
 import qualified Data.ByteString.Base64 as Base64
 import qualified Data.ByteString.Char8  as ByteString
 import qualified Data.IntMap.Strict     as IntMap
+import           Data.Maybe             (fromMaybe)
+import           Data.Monoid            ((<>))
 import qualified Data.Serialize         as Cereal
+import qualified Data.Text              as Text
+import qualified Data.Text.IO           as TIO
+import           Lens.Micro
 import           System.IO
-
-{-# INLINE (<&>) #-}
-infixl 1 <&>
-
--- | Infix flipped fmap
-(<&>) :: Functor f => f a -> (a -> b) -> f b
-(<&>) = flip fmap
 
 main :: IO ()
 main = do
@@ -38,19 +36,27 @@ main = do
     Left err -> hPutStrLn stderr err
     Right d  -> pprintDeck cache d
 
-getCardName :: Cache -> Int -> String
-getCardName Cache{cards=cs} dbfId =
-  IntMap.findWithDefault "<Unknown>" dbfId cs
+lookupCard :: Cache -> Int -> Maybe Card
+lookupCard Cache{cards=cs} dbfId =
+  IntMap.lookup dbfId cs
 
 pprintDeck :: Cache -> Deck -> IO ()
-pprintDeck cache Deck{format=f, hero=h, cards=cs} = do
+pprintDeck cache (Deck f h cs) = do
   putStrLn $ "Deck Format: " ++ show f
-  let heroName = getCardName cache h
-  let hClass = maybe "Unknown" show (IntMap.lookup h heroClasses)
-  putStrLn $ "Deck Hero: " ++ heroName ++ " (" ++ hClass ++ ")"
+  let heroCard = lookupCard cache h
+  let heroName = fromMaybe "<Unknown>"
+                           (heroCard ^? _Just . name)
+  let hClass = heroCard ^? _Just . cardClass
+  let hClassStr = maybe "<Unknown>"
+                        (Text.pack . show)
+                        hClass
+  TIO.putStrLn $ "Deck Hero: " <> heroName <> " (" <> hClassStr <> ")"
   void $ IntMap.traverseWithKey
     (\k v -> do
       putStr (show v ++ "x ")
-      putStrLn (getCardName cache k)
+      let c = lookupCard cache k
+      let cardName = fromMaybe "<Unknown>"
+                               (c ^? _Just . name)
+      TIO.putStrLn cardName
     )
     cs

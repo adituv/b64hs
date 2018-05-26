@@ -6,7 +6,7 @@ module Hearthstone.Card where
 
 import           Hearthstone.Enums
 
-import           Data.Aeson          (FromJSON)
+import           Data.Aeson          (FromJSON (..))
 import           Data.Map.Strict     (Map)
 import           Data.Serialize
 import           Data.Serialize.Text ()
@@ -58,7 +58,8 @@ data Card = Card
 
 instance Serialize Card
 
--- TODO Custom FromJSON
+instance FromJSON Card where
+  parseJSON v = error "TODO"
 
 makeFields ''Card
 

@@ -24,7 +24,7 @@ import           System.Directory
 
 data Cache = Cache
   { build :: Int
-  , cards :: IntMap String
+  , cards :: IntMap Card
   } deriving (Show, Generic)
 
 instance Serialize Cache
@@ -66,12 +66,12 @@ fetchLatestBuild = do
     Just rest -> pure (read $ init rest)
 
 -- | Fetch the latest information on cards from <hearthstonejson.com>
-fetchCards :: (MonadThrow m, MonadIO m) => m (IntMap String)
+fetchCards :: (MonadThrow m, MonadIO m) => m (IntMap Card)
 fetchCards = do
   request <- parseRequest (apiUrl ++ "latest/enUS/cards.collectible.json")
   rawData <- getResponseBody <$> httpJSON @_ @[Card] request
   pure $ List.foldl'
-    (\acc (Card name dbfId) -> IntMap.insert dbfId name acc)
+    (\acc card@Card{_cardDbfId=dbfId} -> IntMap.insert dbfId card acc)
     IntMap.empty
     rawData
 
