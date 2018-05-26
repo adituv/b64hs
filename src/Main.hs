@@ -45,7 +45,8 @@ getCardName Cache{cards=cs} dbfId =
 pprintDeck :: Cache -> Deck -> IO ()
 pprintDeck cache Deck{format=f, hero=h, cards=cs} = do
   putStrLn $ "Deck Format: " ++ show f
-  putStrLn $ "Deck Hero: " ++ show h ++ " (" ++ heroClass h ++ ")"
+  let hClass = maybe "Unknown" show (heroClass h)
+  putStrLn $ "Deck Hero: " ++ show h ++ " (" ++ hClass ++ ")"
   void $ IntMap.traverseWithKey
     (\k v -> do
       putStr (show v ++ "x ")
