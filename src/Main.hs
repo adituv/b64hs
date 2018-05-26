@@ -48,9 +48,9 @@ pprintDeck cache Deck{format=f, hero=h, cards=cs} = do
   putStrLn $ "Deck Hero: " ++ show h ++ " (" ++ heroClass h ++ ")"
   void $ IntMap.traverseWithKey
     (\k v -> do
+      putStr (show v ++ "x ")
       case getCardName cache k of
-        Nothing -> putStr "<Unknown>: "
-        Just nm -> putStr (nm ++ ": ")
-      print v
+        Nothing -> putStrLn "<Unknown>"
+        Just nm -> putStrLn nm
     )
     cs
