@@ -37,21 +37,19 @@ main = do
     Left err -> hPutStrLn stderr err
     Right d  -> pprintDeck cache d
 
-
-getCardName :: Cache -> Int -> Maybe String
+getCardName :: Cache -> Int -> String
 getCardName Cache{cards=cs} dbfId =
-  IntMap.lookup dbfId cs
+  IntMap.findWithDefault "<Unknown>" dbfId cs
 
 pprintDeck :: Cache -> Deck -> IO ()
 pprintDeck cache Deck{format=f, hero=h, cards=cs} = do
   putStrLn $ "Deck Format: " ++ show f
-  let hClass = maybe "Unknown" show (heroClass h)
-  putStrLn $ "Deck Hero: " ++ show h ++ " (" ++ hClass ++ ")"
+  let heroName = getCardName cache h
+  let hClass = maybe "Unknown" show (IntMap.lookup h heroClasses)
+  putStrLn $ "Deck Hero: " ++ heroName ++ " (" ++ hClass ++ ")"
   void $ IntMap.traverseWithKey
     (\k v -> do
       putStr (show v ++ "x ")
-      case getCardName cache k of
-        Nothing -> putStrLn "<Unknown>"
-        Just nm -> putStrLn nm
+      putStrLn (getCardName cache k)
     )
     cs

@@ -12,7 +12,7 @@ import           Data.VarInt
 
 data Deck = Deck
   { format :: Format
-  , hero   :: Hero
+  , hero   :: Int
   , cards  :: IntMap Int
   } deriving Show
 
@@ -33,7 +33,7 @@ getDeck = do
   lenHeroes <- getVarInt
   unless (lenHeroes == 1) $
     fail ("Invalid hero count: " ++ show lenHeroes)
-  hero <- get
+  hero <- getVarInt
   cards1 <- getVIArray
   cards2 <- getVIArray
   cardsN <- getKVArray
@@ -52,7 +52,7 @@ putDeck Deck{format=f, hero=h, cards=cs} = do
   putFormat f
 
   putVarInt 1 -- Length of heroes array
-  put h
+  putVarInt h
   let (cards1, cards2, cardsN) = splitCardData cs
   putVIArray cards1
   putVIArray cards2
