@@ -108,11 +108,11 @@ getFormat :: Get Format
 getFormat = do
   x <- getVarInt
   case x of
-    1 -> pure Standard
-    2 -> pure Wild
+    1 -> pure Wild
+    2 -> pure Standard
     _ -> fail ("Invalid Format: " ++ show x)
 
 putFormat :: Format -> Put
-putFormat Standard = putVarInt 1
-putFormat Wild     = putVarInt 2
+putFormat Wild     = putVarInt 1
+putFormat Standard = putVarInt 2
 
