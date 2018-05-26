@@ -1,5 +1,5 @@
 {-# LANGUAGE DeriveGeneric #-}
-module Card where
+module Hearthstone.Card where
 
 import           Data.Aeson   (FromJSON)
 import           GHC.Generics (Generic)

@@ -1,4 +1,4 @@
-name:                b64hs
+name:                hearthstonehs
 version:             0.1.0.0
 #synopsis:
 #description:
@@ -7,23 +7,28 @@ license:             BSD3
 author:              Iris Ward
 maintainer:          aditu.venyhandottir@gmail.com
 copyright:           2018 Iris Ward
-category:            Web
+category:            Game
 extra-source-files:
 - README.md
 
 dependencies:
   - base >= 4.7 && < 5
   - aeson
-  - base64-bytestring
   - bytestring
   - cereal
   - containers
-  - directory
-  - exceptions
-  - http-conduit
-  - mtl
+
+library:
+  source-dirs: src
 
 executables:
   b64hs:
-    source-dirs:      src
+    source-dirs:      app
     main:             Main.hs
+    dependencies:
+      - hearthstonehs
+      - base64-bytestring
+      - directory
+      - exceptions
+      - http-conduit
+      - mtl

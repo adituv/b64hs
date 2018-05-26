@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedLists #-}
-module Hero(heroClasses) where
+module Hearthstone.Hero(heroClasses) where
 
-import           Class
+import           Hearthstone.Class
 
 import           Data.IntMap.Strict (IntMap)
 import           Data.Serialize

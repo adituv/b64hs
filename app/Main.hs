@@ -4,8 +4,9 @@
 module Main where
 
 import           Cache
-import           Deck
-import           Hero
+
+import           Hearthstone.Deck
+import           Hearthstone.Hero
 
 import           Control.Monad          (void)
 import           Control.Monad.Except

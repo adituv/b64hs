@@ -4,7 +4,7 @@
 {-# LANGUAGE TypeApplications  #-}
 module Cache where
 
-import           Card
+import           Hearthstone.Card
 
 import           Control.Monad          (unless)
 import           Control.Monad.Catch

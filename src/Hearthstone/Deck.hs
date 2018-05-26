@@ -1,7 +1,7 @@
 {-# LANGUAGE TupleSections #-}
-module Deck(Deck(..), Format(..)) where
+module Hearthstone.Deck(Deck(..), Format(..)) where
 
-import           Hero
+import           Hearthstone.Hero
 
 import           Control.Monad      (replicateM, unless, void)
 import           Data.Foldable      (traverse_)

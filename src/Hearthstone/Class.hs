@@ -1,5 +1,5 @@
 {-# LANGUAGE LambdaCase #-}
-module Class(Class(..)) where
+module Hearthstone.Class(Class(..)) where
 
 import           Data.Serialize
 import           Data.VarInt
