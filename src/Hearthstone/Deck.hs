@@ -1,8 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 module Hearthstone.Deck(Deck(..), Format(..)) where
 
-import           Hearthstone.Hero
-
 import           Control.Monad      (replicateM, unless, void)
 import           Data.Foldable      (traverse_)
 import           Data.IntMap.Strict (IntMap)
@@ -11,9 +9,9 @@ import           Data.Serialize
 import           Data.VarInt
 
 data Deck = Deck
-  { format :: Format
-  , hero   :: Int
-  , cards  :: IntMap Int
+  { _deckFormat :: Format
+  , _deckHero   :: Int
+  , _deckCards  :: IntMap Int
   } deriving Show
 
 instance Serialize Deck where
@@ -39,14 +37,10 @@ getDeck = do
   cardsN <- getKVArray
   let cards = combineCardsArrays cards1 cards2 cardsN
 
-  pure Deck
-    { format = fmt
-    , hero = hero
-    , cards = cards
-    }
+  pure $ Deck fmt hero cards
 
 putDeck :: Deck -> Put
-putDeck Deck{format=f, hero=h, cards=cs} = do
+putDeck (Deck f h cs) = do
   putWord8 0  -- Reserved byte
   putVarInt 1 -- Version
   putFormat f

@@ -16,7 +16,11 @@ dependencies:
   - aeson
   - bytestring
   - cereal
+  - cereal-text
   - containers
+  - microlens
+  - microlens-th
+  - text
 
 library:
   source-dirs: src
