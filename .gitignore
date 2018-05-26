@@ -1,3 +1,5 @@
+cardcache.dat
+
 # Using hpack
 *.cabal
 

@@ -13,10 +13,14 @@ extra-source-files:
 
 dependencies:
   - base >= 4.7 && < 5
+  - aeson
   - base64-bytestring
   - bytestring
   - cereal
   - containers
+  - directory
+  - exceptions
+  - http-conduit
   - mtl
 
 executables:
